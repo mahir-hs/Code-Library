@@ -9,10 +9,11 @@ using namespace std;
 
 int v[mx];
 struct ST {
-    int Tree[mx * 4];
+    ll Tree[mx * 4], prop[mx * 4];
     ST()
     {
-        memset(Tree, 0, sizeof(Tree));
+        memset(Tree, 0LL, sizeof(Tree));
+        memset(Tree, 0LL, sizeof(prop));
     }
     void init(int node, int b, int e)
     {
@@ -30,42 +31,44 @@ struct ST {
         Tree[node] = Tree[left] + Tree[right];
     }
 
-    int query(int node, int b, int e, int i, int j)
+    ll query(int node, int b, int e, int i, int j, int carry)
     {
         if (i > e or j < b)
             return 0; //বাইরে চলে গিয়েছে
         if (b >= i and j >= e)
         {
-            return Tree[node]; //রিলেভেন্ট সেগমেন্ট
+            return Tree[node] + carry * (e - b + 1); //রিলেভেন্ট সেগমেন্ট
         }
 
         int left = node * 2; //আরো ভাঙতে হবে
         int right = node * 2 + 1;
         int mid = (b + e) / 2;
-        int leftQ = query(left, b, mid, i, j);
-        int rightQ = query(right, mid + 1, e, i, j);
+
+        ll leftQ = query(left, b, mid, i, j, carry + prop[node]);
+        ll rightQ = query(right, mid + 1, e, i, j, carry + prop[node]);
 
         return leftQ + rightQ; //বাম এবং ডান পাশের যোগফল
     }
 
-    void update(int node, int b, int e, int i, int val)
+    void update(int node, int b, int e, int i, int j, ll val)
     {
-        if (i < b or i > e)
+        if (j < b or i > e)
             return; //বাইরে চলে গিয়েছে
-        if (b >= i and e <= i)
+        if (b >= i and e <= j)
         {
-            Tree[node] = val; //রিলেভেন্ট সেগমেন্ট
+            Tree[node] += ((e - b + 1) * val); //রিলেভেন্ট সেগমেন্ট
+            prop[node] += val;
             return;
         }
 
         int left = node * 2; //আরো ভাঙতে হবে
         int right = node * 2 + 1;
         int mid = (b + e) / 2;
-        update(left, b, mid, i, val);
-        update(right, mid + 1, e, i, val);
-        Tree[node] = Tree[left] + Tree[right];
+        update(left, b, mid, i, j, val);
+        update(right, mid + 1, e, i, j, val);
+        Tree[node] = Tree[left] + Tree[right] + (e - b + 1) * prop[node];
     }
-} st;
+} st[2];
 
 void solve()
 {
@@ -73,33 +76,23 @@ void solve()
 
      */
 
-    int n;
-    cin >> n;
-    for (int i = 1; i <= n; i++)
-    {
-        cin >> v[i];
-    }
 
-
-
-    st.init(1, 1, n);
-    st.update(1, 1, n, 2, 0);
-    cout << st.query(1, 1, n, 1, 3) << nl;
-    st.update(1, 1, n, 2, 2);
-    cout << st.query(1, 1, n, 2, 2) << endl;
+}
+void init()
+{
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+#endif
 }
 
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
+    init();
+    solve();
 
-    int t;
-    cin >> t;
-    while (t--)
-    {
-        solve();
-    }
 
 
 }
