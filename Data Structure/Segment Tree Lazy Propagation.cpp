@@ -7,10 +7,10 @@ using namespace std;
 int v[mx];
 struct ST {
     ll Tree[mx * 4], lazy[mx * 4];
-    ST()
+    void clear()
     {
         memset(Tree, 0LL, sizeof(Tree));
-        memset(Tree, 0LL, sizeof(lazy));
+        memset(lazy, 0LL, sizeof(lazy));
     }
 
     void push(int node, int lx, int rx)
@@ -97,6 +97,8 @@ void solve()
 
     int a, b;
     cin >> a >> b;
+
+    st.clear();
 
     st.init(1, 1, a);
 
