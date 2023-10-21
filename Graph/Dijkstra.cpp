@@ -40,7 +40,12 @@ void dijkstra(int start)
     while (!pq.empty())
     {
         int primary_node = pq.top().second;
+        int w = pq.top().first;
         pq.pop();
+
+        if(dis[primary_node]<w)
+            continue;
+        
         for (int i = 0; i < G[primary_node].size(); i++)
         {
             int cur_node = G[primary_node][i].first;
