@@ -107,7 +107,7 @@ ostream &operator<<(ostream &os, const vector<pair<int,int>> &vec)
 
 
 #include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/Tree_policy.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 #include <ext/pb_ds/detail/standard_policies.hpp>
 using namespace __gnu_pbds;
 using namespace __gnu_cxx;
